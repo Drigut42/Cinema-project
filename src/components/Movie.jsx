@@ -64,7 +64,7 @@ const Movie = ({ movieID, movieIndex }) => {
   return (
     <div
       //position relative for the spinner-position
-      className={`flex justify-center items-center text-black bg-white rounded-sm border-4 border-gray-300 relative ${
+      className={`flex justify-center items-center text-white bg-zinc-800 rounded-sm border-4 border-gray-300 relative ${
         detailsVisible ? "w-full" : " w-[300px] h-[400px]  m-5"
       }  `}
     >
@@ -72,7 +72,7 @@ const Movie = ({ movieID, movieIndex }) => {
       {/* If data is fetched/loaded, it is rendered otherwise the spinner is displayed */}
       {loaded ? (
         <div
-          className={` flex flex-wrap justify-center items-center bg-red-950 p-3   ${
+          className={`h-full flex flex-wrap justify-center items-center bg-red-950 px-5   ${
             detailsVisible ? "" : "flex-col"
           }`}
         >
@@ -83,29 +83,33 @@ const Movie = ({ movieID, movieIndex }) => {
             style={{ width: "200px", height: "300px" }}
             onClick={() => showDetails()}
             className={`object-fill ${
-              !detailsVisible ? "hover:scale-110 	 transition-all" : "mt-4"
+              !detailsVisible
+                ? "hover:scale-110 transition-all outline-gray-200 hover:outline-dotted"
+                : "m-4"
             }`}
           />
           <div
             ref={refToScroll}
             className={!detailsVisible ? "hidden" : "relative w-96 p-5"}
           >
-            <h2 className="font-extrabold">{movieData.title}</h2>
+            <h2 className="font-extrabold border-b-2">{movieData.title}</h2>
 
-            <p className="text-sm border-2 mt-1">
-              <span>Director: </span>
-              {movieData.director},<br /> <span>Writer: </span>
+            <p className="text-sm  mt-1">
+              <b>Director: </b>
+              {movieData.director},<br /> <b>Writer: </b>
               {movieData.writer}
               <br />
-              <span>Main Actors: </span>
+              <b>Main Actors: </b>
               {movieData.actors}
             </p>
-            <p className="text-semibold m-2">{movieData.plot}</p>
+            <p className="text-semibold m-2 outline outline-1 p-2">
+              {movieData.plot}
+            </p>
             <p className="text-sm">
-              <span>Genre: </span>
+              <b>Genre: </b>
               {movieData.genre}
               <br />
-              <span>Runtime: </span>
+              <b>Runtime: </b>
               {movieData.runtime}
             </p>
             <p>little calender-table</p>
@@ -139,11 +143,7 @@ const Movie = ({ movieID, movieIndex }) => {
           </NavLink>
         </div>
       ) : (
-        <SquareLoader
-          color="#584b7e"
-          size={100}
-          className="absolute top-[120px] left-[50px]"
-        />
+        <SquareLoader color="rgb(69 10 10)" size={100} />
       )}
     </div>
   );

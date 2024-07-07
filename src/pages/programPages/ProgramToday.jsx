@@ -17,7 +17,6 @@ function ProgramToday() {
         <h2>5pm</h2>
         <Movie movieID={movieIDs.movie3} movieIndex={3} />
         <h2>8pm</h2>
-
         <Movie movieID={movieIDs.movie4} movieIndex={4} />
       </div>
     </div>
