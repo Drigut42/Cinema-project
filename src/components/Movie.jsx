@@ -2,13 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import fetchMovieData from "../components/fetch/FetchMovieData";
 import { SquareLoader } from "react-spinners";
 import { NavLink } from "react-router-dom";
+import { useMovieContext } from "./MovieProvider";
 
 // Id is for fetching the movie data, but index is for the self-defined order of the movies (added to the movieData)
 // eslint-disable-next-line react/prop-types
-const Movie = ({ movieID, movieIndex }) => {
+const Movie = ({ movieID, movieIndex, clockTime }) => {
   const [movieData, setMovieData] = useState({});
   const [loaded, setLoaded] = useState(false);
-  const [detailsVisible, setDetailsVisible] = useState(false);
+  // Hide movie details
+  const { hideDetails, visibleIndex, showDetails } = useMovieContext();
+
+  const showMovieDetails = () => {
+    showDetails(movieIndex);
+  };
+
+  const detailsVisible = visibleIndex === movieIndex;
+  // const { visibleIndex, showDetails } = useMovieContext();
+
+  // const [detailsVisible, setDetailsVisible] = useState(false);
   const refToScroll = useRef(null);
 
   useEffect(() => {
@@ -44,9 +55,9 @@ const Movie = ({ movieID, movieIndex }) => {
   }, [movieID, movieIndex]);
 
   // Clickhandler: show details
-  const showDetails = () => {
-    setDetailsVisible(!detailsVisible);
-  };
+  // const showDetails = () => {
+  //   setDetailsVisible(!detailsVisible);
+  // };
 
   // Second useEffect for scrolling to the details of the movieComponent after rendering by clicking the image
   // ref assigned to this element AFTER rendering the element by click (detailsVisible updated)
@@ -65,7 +76,7 @@ const Movie = ({ movieID, movieIndex }) => {
     <div
       //position relative for the spinner-position
       className={`flex justify-center items-center text-white bg-zinc-800 rounded-sm border-4 border-gray-300 relative ${
-        detailsVisible ? "w-full" : " w-[300px] h-[400px]  m-5"
+        detailsVisible ? "w-full order-first" : " w-[300px] h-[400px]  m-5"
       }  `}
     >
       {" "}
@@ -76,12 +87,15 @@ const Movie = ({ movieID, movieIndex }) => {
             detailsVisible ? "" : "flex-col"
           }`}
         >
+          {/* Program pages have a clock time*/}
+          {clockTime ? <div>{clockTime}</div> : null}
+
           <img
             src={movieData.poster}
             alt="movie-poster"
             // img width and height adjusted
             style={{ width: "200px", height: "300px" }}
-            onClick={() => showDetails()}
+            onClick={() => showMovieDetails()}
             className={`object-fill ${
               !detailsVisible
                 ? "hover:scale-110 transition-all outline-gray-200 hover:outline-dotted"
@@ -122,7 +136,7 @@ const Movie = ({ movieID, movieIndex }) => {
             </NavLink>
             {/* text-white background opacity-80 border-2 px-6 hover:bg-red-700 active:text-white hover:scale-110 transition-all mt-4 */}
             <button
-              onClick={showDetails}
+              onClick={() => hideDetails()}
               className="absolute top-5 right-5 w-5 h-5 pb-1 rounded-full opacity-80  border-2 text-xs text-white  hover:bg-red-700 
             background
              hover:scale-110 transition-all"

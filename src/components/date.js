@@ -41,4 +41,7 @@ for (let i = 2; i <= 6; i++) {
   week.push(nextDayDate);
 }
 
-export { todayDate, tomorrowDate, week };
+const todayDateString = `${todayDate.day} ${todayDate.date}.${todayDate.month}.${todayDate.year}`;
+const tomorrowDateString = `${tomorrowDate.day} ${tomorrowDate.date}.${tomorrowDate.month}.${tomorrowDate.year}`;
+
+export { todayDateString, tomorrowDateString, week };
