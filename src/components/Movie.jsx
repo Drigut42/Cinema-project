@@ -2,13 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import fetchMovieData from "../components/fetch/FetchMovieData";
 import { SquareLoader } from "react-spinners";
 import { NavLink } from "react-router-dom";
+import { useMovieContext } from "./MovieProvider";
 
 // Id is for fetching the movie data, but index is for the self-defined order of the movies (added to the movieData)
 // eslint-disable-next-line react/prop-types
-const Movie = ({ movieID, movieIndex }) => {
+const Movie = ({ movieID, movieIndex, clockTime }) => {
   const [movieData, setMovieData] = useState({});
   const [loaded, setLoaded] = useState(false);
-  const [detailsVisible, setDetailsVisible] = useState(false);
+  // Hide movie details
+  const { hideDetails, visibleIndex, showDetails } = useMovieContext();
+
+  const showMovieDetails = () => {
+    showDetails(movieIndex);
+  };
+
+  const detailsVisible = visibleIndex === movieIndex;
+  // const { visibleIndex, showDetails } = useMovieContext();
+
+  // const [detailsVisible, setDetailsVisible] = useState(false);
   const refToScroll = useRef(null);
 
   useEffect(() => {
@@ -44,9 +55,9 @@ const Movie = ({ movieID, movieIndex }) => {
   }, [movieID, movieIndex]);
 
   // Clickhandler: show details
-  const showDetails = () => {
-    setDetailsVisible(!detailsVisible);
-  };
+  // const showDetails = () => {
+  //   setDetailsVisible(!detailsVisible);
+  // };
 
   // Second useEffect for scrolling to the details of the movieComponent after rendering by clicking the image
   // ref assigned to this element AFTER rendering the element by click (detailsVisible updated)
@@ -64,48 +75,55 @@ const Movie = ({ movieID, movieIndex }) => {
   return (
     <div
       //position relative for the spinner-position
-      className={`text-black bg-white rounded-sm border border-gray-300 relative ${
-        detailsVisible ? "w-full" : " w-[300px] h-[400px]  m-5"
+      className={`flex justify-center items-center text-white bg-zinc-800 rounded-sm border-4 border-gray-300 relative ${
+        detailsVisible ? "w-full order-first" : " w-[300px] h-[400px]  m-5"
       }  `}
     >
       {" "}
       {/* If data is fetched/loaded, it is rendered otherwise the spinner is displayed */}
       {loaded ? (
         <div
-          className={`bg-white flex flex-wrap justify-center items-center p-5 ${
+          className={`h-full flex flex-wrap justify-center items-center bg-red-950 px-5   ${
             detailsVisible ? "" : "flex-col"
           }`}
         >
+          {/* Program pages have a clock time*/}
+          {clockTime ? <div>{clockTime}</div> : null}
+
           <img
             src={movieData.poster}
             alt="movie-poster"
             // img width and height adjusted
-            style={{ width: "250px", height: "300px" }}
-            onClick={() => showDetails()}
-            className={`object-contain ${
-              !detailsVisible ? "hover:scale-110 transition-all" : "mt-4"
+            style={{ width: "200px", height: "300px" }}
+            onClick={() => showMovieDetails()}
+            className={`object-fill ${
+              !detailsVisible
+                ? "hover:scale-110 transition-all outline-gray-200 hover:outline-dotted"
+                : "m-4"
             }`}
           />
           <div
             ref={refToScroll}
             className={!detailsVisible ? "hidden" : "relative w-96 p-5"}
           >
-            <h2 className="font-extrabold">{movieData.title}</h2>
+            <h2 className="font-extrabold border-b-2">{movieData.title}</h2>
 
-            <p className="text-sm border-2 mt-1">
-              <span>Director: </span>
-              {movieData.director},<br /> <span>Writer: </span>
+            <p className="text-sm  mt-1">
+              <b>Director: </b>
+              {movieData.director},<br /> <b>Writer: </b>
               {movieData.writer}
               <br />
-              <span>Main Actors: </span>
+              <b>Main Actors: </b>
               {movieData.actors}
             </p>
-            <p className="text-semibold m-2">{movieData.plot}</p>
+            <p className="text-semibold m-2 outline outline-1 p-2">
+              {movieData.plot}
+            </p>
             <p className="text-sm">
-              <span>Genre: </span>
+              <b>Genre: </b>
               {movieData.genre}
               <br />
-              <span>Runtime: </span>
+              <b>Runtime: </b>
               {movieData.runtime}
             </p>
             <p>little calender-table</p>
@@ -118,8 +136,10 @@ const Movie = ({ movieID, movieIndex }) => {
             </NavLink>
             {/* text-white background opacity-80 border-2 px-6 hover:bg-red-700 active:text-white hover:scale-110 transition-all mt-4 */}
             <button
-              onClick={showDetails}
-              className="w-7 h-7 rounded-full border text-white background opacity-80 absolute top-5 right-5 border-2   active:text-white hover:scale-110 transition-all"
+              onClick={() => hideDetails()}
+              className="absolute top-5 right-5 w-5 h-5 pb-1 rounded-full opacity-80  border-2 text-xs text-white  hover:bg-red-700 
+            background
+             hover:scale-110 transition-all"
             >
               x
             </button>
@@ -137,11 +157,7 @@ const Movie = ({ movieID, movieIndex }) => {
           </NavLink>
         </div>
       ) : (
-        <SquareLoader
-          color="#584b7e"
-          size={100}
-          className="absolute top-[120px] left-[50px]"
-        />
+        <SquareLoader color="rgb(69 10 10)" size={100} />
       )}
     </div>
   );
