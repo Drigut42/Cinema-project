@@ -2,7 +2,7 @@
 
 Dies ist eine Kinowebseite, die im Rahmen eines Teamprojekts von [Elvira Dederer](https://github.com/elvira492) und [Drita Guta](https://github.com/Drigut42) entwickelt wurde. Die Webseite zeigt aktuelle Filme an und ermöglicht es den Nutzern, Informationen über Filme abzurufen und Tickets zu kaufen.
 
-Die Webseite wurde mit React entwickelt und verwendet einen Express-basierten Proxy-Server, um Filmdaten von externen APIs abzurufen. Diese Daten werden im `localStorage` gespeichert, um eine schnelle und effiziente Wiederverwendung der Daten zu ermöglichen.
+Die Webseite wurde mit React entwickelt und verwendet einen Express-basierten Proxy-Server, um Filmdaten von einer externen API abzurufen. Diese Daten werden im `localStorage` gespeichert, um eine schnelle und effiziente Wiederverwendung der Daten zu ermöglichen.
 
 ## Features
 
